@@ -3,46 +3,50 @@ package main;
 import java.util.Scanner;
 
 public class Decoder {
-
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         System.out.println("Enter the message you want to decode: ");
-
         String messageWithParityBits = s.nextLine();
+        s.close();
 
-        int positionOfDamagedBit = checkAllControlBits(messageWithParityBits);
 
-        String result = "";
-        if (positionOfDamagedBit != 0) {
-            String fixedString = fixErrorAndPrintPosition(positionOfDamagedBit, messageWithParityBits);
-            result = decode(fixedString);
-        } else {
-            result = decode(messageWithParityBits);
+        boolean withErrors = false;
+        StringBuilder sb = new StringBuilder(messageWithParityBits);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < messageWithParityBits.length(); i+=12) {
+            String binaryCharWithParityBits = sb.substring(i , i+12);
+            int positionOfDamagedBit = checkAllControlBits(binaryCharWithParityBits);
+            if (positionOfDamagedBit != 0) {
+                withErrors = true;
+                binaryCharWithParityBits = fixError(positionOfDamagedBit, binaryCharWithParityBits);
+                System.out.printf("Fix error in symbol: %d at position: %d\n", i/12 + 1, positionOfDamagedBit + 1);
+            }
+            result.append(decode(binaryCharWithParityBits));
         }
-
-        System.out.println("Repaired text: " + convertToText(result));
+        if (!withErrors){
+            System.out.println("!!!Received without errors!!!");
+        }
+        System.out.println("Your message: \n\n" + result);
     }
 
-    private static String decode(String messageWithControlBits){
-        int j = 0;
+    private static char decode(String messageWithControlBits){
         StringBuilder outputString = new StringBuilder();
         for (int i = 0; i < messageWithControlBits.length(); i++)
         {
-            if (!(Helpers.checkPosition(i)))
+            if (i != 0 && i != 1 && i != 3 && i != 7)
             {
                 outputString.append(messageWithControlBits.charAt(i));
-
             }
         }
-        return outputString.toString();
+        return (char)(Integer.parseInt(outputString.toString(),2));
     }
 
-    private static String fixErrorAndPrintPosition(int y, String messageToFix) {
+    private static String fixError(int y, String messageToFix) {
         StringBuilder sb = new StringBuilder(messageToFix);
         if (y != 0)
         {
             sb.replace(y-1,y,Helpers.changeBit(Character.digit(sb.charAt(y-1),10)));
-            System.out.println("\nFound error in " + (y) + " bit");
         }
         return sb.toString();
     }
@@ -54,32 +58,13 @@ public class Decoder {
         for (int i = 0; i < messageWithControlBits.length(); i++) {
             if (Helpers.checkPosition(i)) {
                 sb.replace(i,i+1, "0");
-                String controlBitValue = Helpers.calculateParityBitValue(sb, i);
-                if (Character.digit(messageWithControlBits.charAt(i),10) != Character.digit(controlBitValue.charAt(0),10))
+                int controlBitValue = Helpers.calculateParityBitValue(sb, i);
+                if (Character.digit(messageWithControlBits.charAt(i),10) != controlBitValue)
                 {
                     positionsOfWrongBits += (i +1);
                 }
             }
         }
         return positionsOfWrongBits;
-    }
-
-    private static void resetControlBits(String messageWithControlBits){
-
-    }
-
-    /**
-     * Converts binary string to human-readable string
-     * @param messageWithoutControlBits
-     * @return human-readable string
-     */
-    private static String convertToText(String messageWithoutControlBits) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < messageWithoutControlBits.length()/8; i++) {
-
-            int a = Integer.parseInt(messageWithoutControlBits.substring(8*i,(i+1)*8),2);
-            sb.append((char)(a));
-        }
-        return sb.toString();
     }
 }

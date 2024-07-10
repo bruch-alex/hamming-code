@@ -2,34 +2,18 @@ package main;
 
 public class Helpers {
 
-    public static double log2(int n) {
-        return Math.log(n) / Math.log(2);
+    public static int calculateParityBitValue(StringBuilder binaryMessageWithEmptyParityBits, int i){
+        int sum = getSum(i, binaryMessageWithEmptyParityBits);
+        return sum % 2;
     }
 
-    public static String calculateParityBitValue(StringBuilder binaryMessageWithEmptyParityBits, int i){
-        StringBuilder sb = new StringBuilder(binaryMessageWithEmptyParityBits);
-        int sum = getSum(i, sb);
-        return String.valueOf(sum % 2);
-    }
-
-
-    /**
-     * Calculate and replace all control bits
-     * @param binaryMessageWithEmptyParityBits
-     * @return
-     */
-    public static String replaceControlBits(String binaryMessageWithEmptyParityBits) {
-        StringBuilder sb = new StringBuilder(binaryMessageWithEmptyParityBits);
-
-        for (int i = 0; i < binaryMessageWithEmptyParityBits.length() - 1; i++)
+    public static StringBuilder replaceParityBits(StringBuilder binaryMessageWithEmptyParityBits) {
+        for (int i = 1; i <= 12; i *= 2)
         {
-            if (Helpers.checkPosition(i))
-            {
-                String controlBitValue = calculateParityBitValue(sb, i);
-                sb.replace(i, i+1, controlBitValue);
-            }
+                int controlBitValue = calculateParityBitValue(binaryMessageWithEmptyParityBits, i-1);
+                binaryMessageWithEmptyParityBits.replace(i-1, i, String.valueOf(controlBitValue));
         }
-        return sb.toString();
+        return binaryMessageWithEmptyParityBits;
     }
 
     public static int getSum(int parityBitPosition, StringBuilder messageWithEmptyParityBits) {
@@ -46,27 +30,22 @@ public class Helpers {
         return sum;
     }
 
-    public static int calculateAmountOfParityBits(int messageLength){
-        int amountOfParityBits = 1;
-        while (Math.pow(2, amountOfParityBits) < amountOfParityBits + messageLength) {
-            amountOfParityBits++;
-        }
-        return amountOfParityBits;
+    /**
+     * This method checks if the position is the location for the parity bit.
+     * @param i Number of element in a binary sequence
+     * @return true if position is a place for parity bit
+     */
+    public static boolean checkPosition(int i){
+        return i == 0 || i == 1 || i == 3 || i == 7;
     }
 
     /**
-     * This method checks if the @param position is the location for the control bit.
-     * @param position Number of element in a binary sequence. Starts with 1.
-     * @return true if position is a place for control bit
+     * Changes value between 0 and 1;
+     * @param value
+     * @return 1, if value is 0 and return 0, if value is 1.
      */
-    public static boolean checkPosition(int position){
-        return Helpers.log2(position + 1) % 1 == 0;
-    }
-
     public static String changeBit(int value){
-        if (value == 0){
-            return "1";
-        }
-        return "0";
+        return (String.valueOf((value & 1) == 0 ? 1 : 0));
     }
 }
+
