@@ -3,12 +3,10 @@ package main;
 import java.util.Scanner;
 
 public class Decoder {
-    public static void main(String[] args) {
+    public static void startDecoder() {
         Scanner s = new Scanner(System.in);
         System.out.println("Enter the message you want to decode: ");
         String messageWithParityBits = s.nextLine();
-        s.close();
-
 
         boolean withErrors = false;
         StringBuilder sb = new StringBuilder(messageWithParityBits);
