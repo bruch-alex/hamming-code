@@ -7,6 +7,8 @@ The encoder applies the hamming code [12,4] to each symbol in the text.
 
 # Project Structure
 
+UI - [Main.java](src%2Fmain%2FMain.java)
+
 Coder - [Coder.java](src%2Fmain%2FCoder.java)
 
 Decoder - [Decoder.java](src%2Fmain%2FDecoder.java)

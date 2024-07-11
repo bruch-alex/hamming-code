@@ -47,5 +47,10 @@ public class Helpers {
     public static String changeBit(int value){
         return (String.valueOf((value & 1) == 0 ? 1 : 0));
     }
+
+    public static void clearConsole(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }
 

@@ -2,26 +2,23 @@ package main;
 
 import java.util.Scanner;
 
-/**
- *
- **/
 public class Coder {
-    public static void main(String[] args) {
-
-        Scanner s = new Scanner(System.in);
+    public static String startCoder(Scanner s) {
         System.out.println("Enter the message you want to encode: ");
         String message = s.nextLine();
-        s.close();
+        //Helpers.clearConsole();
+        //System.out.println("You entered: " + message);
 
         StringBuilder result = new StringBuilder();
 
         for (char c : message.toCharArray()){
             StringBuilder binaryCharWithEmptyParityBits = convertToBinaryWithParityBits(c);
-            StringBuilder binaryCharWithParityBits = Helpers.replaceParityBits(binaryCharWithEmptyParityBits);
+            StringBuilder binaryCharWithCalculatedParityBits = Helpers.replaceParityBits(binaryCharWithEmptyParityBits);
 
-            result.append(binaryCharWithParityBits);
+            result.append(binaryCharWithCalculatedParityBits);
         }
-        System.out.println("Second: \t" + result);
+        return result.toString();
+        //System.out.println("Your encoded text: \n\n" + result);
     }
 
     /**
@@ -32,7 +29,6 @@ public class Coder {
     private static StringBuilder convertToBinaryWithParityBits(char symbol){
         StringBuilder binaryString = new StringBuilder();
         int val = symbol;
-        System.out.println("value " + val);
         for (int i = 0; i < 12  ; i++)
         {
             if(Helpers.checkPosition(i))
