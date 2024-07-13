@@ -1,14 +1,5 @@
-package main;
-
-import java.util.Scanner;
-
 public class Coder {
-    public static String startCoder(Scanner s) {
-        System.out.println("Enter the message you want to encode: ");
-        String message = s.nextLine();
-        //Helpers.clearConsole();
-        //System.out.println("You entered: " + message);
-
+    public static String startCoder(String message) {
         StringBuilder result = new StringBuilder();
 
         for (char c : message.toCharArray()){
@@ -18,7 +9,6 @@ public class Coder {
             result.append(binaryCharWithCalculatedParityBits);
         }
         return result.toString();
-        //System.out.println("Your encoded text: \n\n" + result);
     }
 
     /**
