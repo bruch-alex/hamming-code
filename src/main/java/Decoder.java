@@ -1,18 +1,14 @@
-package main;
+import org.jline.reader.LineReader;
 
 import java.util.Scanner;
 
 public class Decoder {
-    public static void startDecoder() {
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter the message you want to decode: ");
-        String messageWithParityBits = s.nextLine();
-
+    public static String startDecoder(String message) {
         boolean withErrors = false;
-        StringBuilder sb = new StringBuilder(messageWithParityBits);
+        StringBuilder sb = new StringBuilder(message);
         StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < messageWithParityBits.length(); i+=12) {
+        for (int i = 0; i < message.length(); i+=12) {
             String binaryCharWithParityBits = sb.substring(i , i+12);
             int positionOfDamagedBit = checkAllControlBits(binaryCharWithParityBits);
             if (positionOfDamagedBit != 0) {
@@ -25,7 +21,7 @@ public class Decoder {
         if (!withErrors){
             System.out.println("!!!Received without errors!!!");
         }
-        System.out.println("Your message: \n\n" + result);
+        return result.toString();
     }
 
     private static char decode(String messageWithControlBits){
@@ -56,7 +52,7 @@ public class Decoder {
         for (int i = 0; i < messageWithControlBits.length(); i++) {
             if (Helpers.checkPosition(i)) {
                 sb.replace(i,i+1, "0");
-                int controlBitValue = Helpers.calculateParityBitValue(sb, i);
+                int controlBitValue = Helpers.calculateParityBitValue(i, sb);
                 if (Character.digit(messageWithControlBits.charAt(i),10) != controlBitValue)
                 {
                     positionsOfWrongBits += (i +1);
