@@ -1,9 +1,5 @@
-import org.jline.reader.LineReader;
-
-import java.util.Scanner;
-
 public class Decoder {
-    public static String startDecoder(String message) {
+    public static String start(String message) {
         boolean withErrors = false;
         StringBuilder sb = new StringBuilder(message);
         StringBuilder result = new StringBuilder();
@@ -19,7 +15,7 @@ public class Decoder {
             result.append(decode(binaryCharWithParityBits));
         }
         if (!withErrors){
-            System.out.println("!!!Received without errors!!!");
+            System.out.println("\n!!!Received without errors!!!");
         }
         return result.toString();
     }
