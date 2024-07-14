@@ -1,5 +1,5 @@
 public class Coder {
-    public static String startCoder(String message) {
+    public static String start(String message) {
         StringBuilder result = new StringBuilder();
 
         for (char c : message.toCharArray()){

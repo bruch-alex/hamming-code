@@ -1,5 +1,4 @@
 public class Helpers {
-
     public static StringBuilder replaceParityBits(StringBuilder binaryMessageWithEmptyParityBits) {
         for (int i = 1; i <= 12; i *= 2)
         {
