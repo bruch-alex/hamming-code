@@ -36,7 +36,7 @@ public class Decoder {
         StringBuilder sb = new StringBuilder(messageToFix);
         if (y != 0)
         {
-            sb.replace(y-1,y,Helpers.changeBit(Character.digit(sb.charAt(y-1),10)));
+            sb.replace(y-1,y,String.valueOf(Helpers.changeBit(Character.digit(sb.charAt(y-1),10))));
         }
         return sb.toString();
     }
