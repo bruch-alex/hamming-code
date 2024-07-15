@@ -9,7 +9,6 @@ public class Helpers {
     }
 
     /**
-     *
      * @param parityBitPosition - position of parity bit in message (starts with 0)
      * @return value of parity bit (1 or 0)
      */
@@ -41,8 +40,8 @@ public class Helpers {
      * @param value binary value to be converted
      * @return 1, if value is 0 and return 0, if value is 1.
      */
-    public static String changeBit(int value){
-        return (String.valueOf((value & 1) == 0 ? 1 : 0));
+    public static int changeBit(int value){
+        return (value & 1) == 0 ? 1 : 0;
     }
 
 }

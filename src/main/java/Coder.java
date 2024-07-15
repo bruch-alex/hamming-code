@@ -16,7 +16,7 @@ public class Coder {
      * @param symbol symbol to convert
      * @return binary string with 12 bits
      */
-    private static StringBuilder convertToBinaryWithParityBits(char symbol){
+    public static StringBuilder convertToBinaryWithParityBits(char symbol){
         StringBuilder binaryString = new StringBuilder();
         int val = symbol;
         for (int i = 0; i < 12  ; i++)
