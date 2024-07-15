@@ -44,9 +44,20 @@ public class Main {
     }
 
     public static void encodeSequence(LineReader reader, Terminal terminal) {
-        System.out.println("Enter the message you want to encode: ");
-        result = Coder.start(reader.readLine());
-
+        System.out.println("Read from console (1) or from file (2)");
+        switch(reader.readLine()){
+            case "1":
+                System.out.println("Enter the message you want to encode: ");
+                result = Coder.start(reader.readLine());
+                break;
+            case "2":
+                System.out.println("Enter file name to encode");
+                String src = reader.readLine();
+                result = Coder.start(Helpers.readFile(src));
+                break;
+            default:
+                System.err.println("Invalid input. Try again");
+        }
         showPrintOptions();
         handlePrintOptions(reader);
     }
@@ -62,11 +73,10 @@ public class Main {
             switch (reader.readLine()) {
                 case "1":
                     printResultToConsole(result);
-                    exit = true;
                     break;
                 case "2": // Plug while writing to a file is not supported
-                    System.err.println("Not implemented");
-                    showPrintOptions();
+                    System.out.println("Enter output file name ");
+                    Helpers.writeToFile(result, reader.readLine());
                     break;
                 case "3":
                     exit = true;
@@ -74,6 +84,15 @@ public class Main {
                 default:
                     System.err.println("Invalid input. Try again");
                     showPrintOptions();
+                    break;
+            }
+            System.out.println("Print againg? y/n");
+            switch(reader.readLine()){
+                case "y":
+                    showPrintOptions();
+                    break;
+                case "n":
+                    exit = true;
                     break;
             }
         }
@@ -85,9 +104,20 @@ public class Main {
     }
 
     public static void decodeSequence(LineReader reader, Terminal terminal) {
-        System.out.println("Enter text you want to decode:");
-        result = Decoder.start(reader.readLine());
-
+        System.out.println("Read from console (1) or from file (2)");
+        switch(reader.readLine()){
+            case "1":
+                System.out.println("Enter the message you want to decode: ");
+                result = Decoder.start(reader.readLine());
+                break;
+            case "2":
+                System.out.println("Enter file name to decode");
+                String src = reader.readLine();
+                result = Decoder.start(Helpers.readFile(src));
+                break;
+            default:
+                System.err.println("Invalid input. Try again");
+        }
         showPrintOptions();
         handlePrintOptions(reader);
     }

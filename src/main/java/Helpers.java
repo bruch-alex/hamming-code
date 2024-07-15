@@ -1,3 +1,8 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class Helpers {
     public static StringBuilder replaceParityBits(StringBuilder binaryMessageWithEmptyParityBits) {
         for (int i = 1; i <= 12; i *= 2)
@@ -42,6 +47,31 @@ public class Helpers {
      */
     public static int changeBit(int value){
         return (value & 1) == 0 ? 1 : 0;
+    }
+
+    public static String readFile(String file){
+        StringBuilder sb = new StringBuilder();
+        try(FileInputStream input = new FileInputStream(file))
+        {
+            byte[] buffer = input.readAllBytes();
+            for (byte c : buffer){
+                sb.append((char) c);
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void writeToFile(String result, String fileName){
+        StringBuilder sb = new StringBuilder();
+        try(FileOutputStream output = new FileOutputStream(fileName))
+        {
+            byte[] buffer = result.getBytes();
+            output.write(buffer);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
