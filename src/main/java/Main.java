@@ -3,6 +3,8 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
+import java.util.concurrent.TimeUnit;
+
 public class Main {
     static String result;
 
@@ -45,7 +47,7 @@ public class Main {
 
     public static void encodeSequence(LineReader reader, Terminal terminal) {
         System.out.println("Read from console (1) or from file (2)");
-        switch(reader.readLine()){
+        switch (reader.readLine()) {
             case "1":
                 System.out.println("Enter the message you want to encode: ");
                 result = Coder.start(reader.readLine());
@@ -86,8 +88,8 @@ public class Main {
                     showPrintOptions();
                     break;
             }
-            System.out.println("Print againg? y/n");
-            switch(reader.readLine()){
+            System.out.println("Print again? y/n");
+            switch (reader.readLine()) {
                 case "y":
                     showPrintOptions();
                     break;
@@ -105,7 +107,7 @@ public class Main {
 
     public static void decodeSequence(LineReader reader, Terminal terminal) {
         System.out.println("Read from console (1) or from file (2)");
-        switch(reader.readLine()){
+        switch (reader.readLine()) {
             case "1":
                 System.out.println("Enter the message you want to decode: ");
                 result = Decoder.start(reader.readLine());

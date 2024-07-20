@@ -33,7 +33,7 @@ public class Helpers {
 
     /**
      * This method checks if the position is the location for the parity bit.
-     * @param i Number of element in a binary sequence
+     * @param i Number of element in a binary sequence (starts with 0)
      * @return true if position is a place for parity bit
      */
     public static boolean checkPosition(int i){
@@ -46,7 +46,7 @@ public class Helpers {
      * @return 1, if value is 0 and return 0, if value is 1.
      */
     public static int changeBit(int value){
-        return (value & 1) == 0 ? 1 : 0;
+        return value ^ 1;
     }
 
     public static String readFile(String file){
