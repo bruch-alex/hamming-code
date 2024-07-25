@@ -3,7 +3,7 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
-import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 public class Main {
     static String result;
@@ -12,21 +12,21 @@ public class Main {
         try {
             Terminal terminal = TerminalBuilder.builder().system(true).build();
             LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
-            startUI(reader, terminal);
+            startUI(reader);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void startUI(LineReader reader, Terminal terminal) {
+    public static void startUI(LineReader reader) {
         while (true) {
-            printMainMenu(terminal);
+            printMainMenu();
             switch (reader.readLine()) {
                 case "1":
-                    encodeSequence(reader, terminal);
+                    encodeSequence(reader);
                     break;
                 case "2":
-                    decodeSequence(reader, terminal);
+                    decodeSequence(reader);
                     break;
                 case "3":
                     System.exit(0);
@@ -37,7 +37,7 @@ public class Main {
         }
     }
 
-    public static void printMainMenu(Terminal terminal) {
+    public static void printMainMenu() {
         System.out.println("========== Main Menu ==========");
         System.out.println(
                 "1. Encode text with Hamming code\n" +
@@ -45,7 +45,7 @@ public class Main {
                         "3. Exit program");
     }
 
-    public static void encodeSequence(LineReader reader, Terminal terminal) {
+    public static void encodeSequence(LineReader reader) {
         System.out.println("Read from console (1) or from file (2)");
         switch (reader.readLine()) {
             case "1":
@@ -88,7 +88,7 @@ public class Main {
                     showPrintOptions();
                     break;
             }
-            System.out.println("Print again? y/n");
+            System.out.println("Show print options again? y/n");
             switch (reader.readLine()) {
                 case "y":
                     showPrintOptions();
@@ -105,22 +105,44 @@ public class Main {
         System.out.println("\n" + result + "\n");
     }
 
-    public static void decodeSequence(LineReader reader, Terminal terminal) {
+    public static void decodeSequence(LineReader reader) {
+        String message;
         System.out.println("Read from console (1) or from file (2)");
         switch (reader.readLine()) {
             case "1":
-                System.out.println("Enter the message you want to decode: ");
-                result = Decoder.start(reader.readLine());
+                while (true) {
+                    System.out.println("Enter the message you want to decode: ");
+                    message = reader.readLine();
+                    if (!validateBinaryInput(message)) {
+                        System.out.println("Try again! Input must contain only 0 and 1");
+                    } else {
+                        break;
+                    }
+                }
+                result = Decoder.start(message);
                 break;
             case "2":
-                System.out.println("Enter file name to decode");
-                String src = reader.readLine();
-                result = Decoder.start(Helpers.readFile(src));
+                while (true) {
+                    System.out.println("Enter file name to decode");
+                    String src = reader.readLine();
+                    message = Helpers.readFile(src);
+                    if (!validateBinaryInput(message)) {
+                        System.out.println("Try again! Input file must contain only 0 and 1");
+                    } else {
+                        break;
+                    }
+                }
+                result = Decoder.start(message);
                 break;
             default:
                 System.err.println("Invalid input. Try again");
         }
         showPrintOptions();
         handlePrintOptions(reader);
+    }
+
+    private static boolean validateBinaryInput(String message) {
+        Pattern pattern = Pattern.compile("[01]*");
+        return pattern.matcher(message).matches();
     }
 }
